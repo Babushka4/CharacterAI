@@ -1,4 +1,5 @@
-from sqlalchemy import Table, Column, MetaData, Integer, String, ForeignKey
+from sqlalchemy import Table, Column, MetaData, Integer, String, ForeignKey, select
+
 
 metadata = MetaData()
 
@@ -11,7 +12,7 @@ user = Table(
     Column('surname', String(length=100), nullable=False),
     Column('time', String(length=320), unique=True, index=True, nullable=False),
 
-    Column('character_id', ForeignKey('character.id')),
+    Column('character_id', ForeignKey('character.id'), nullable=True),
 )
 
 dialog = Table(
