@@ -9,7 +9,6 @@ user = Table(
     Column('id', Integer, primary_key=True),
     Column('username', String, nullable=False),
     Column('name', String(length=100), nullable=False),
-    Column('surname', String(length=100), nullable=False),
     Column('time', String(length=320), unique=True, index=True, nullable=False),
 
     Column('character_id', ForeignKey('character.id'), nullable=True),

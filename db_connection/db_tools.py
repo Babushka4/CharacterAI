@@ -1,4 +1,5 @@
 import psycopg2
+from datetime import datetime
 
 
 class SQLRequests:
@@ -18,14 +19,31 @@ class SQLRequests:
 
     def user_exists(self, user_id):
 
-        self.cursor.execute(f'SELECT user_id FROM bikbeepbot."UsersBD" WHERE user_id = {user_id}')
+        self.cursor.execute(f'SELECT * FROM "user" WHERE id = {user_id}')
         print('user extracted')
 
         return self.cursor.fetchone()
 
-    def create_user(self, user_id):
+    def create_user(self, data: dict):
+        print(data)
+        sql = 'INSERT INTO "user" ('
+        column_list = ', '.join(data.keys())
+        sql += column_list + ') VALUES('
 
-        self.cursor.execute(f'INSERT INTO "user" (id) VALUES({user_id})')
+        for value in data.values():
+            if isinstance(value, datetime):
+                sql += 'Null, '
+            elif type(value) == int:
+                sql += f'{value}, '
+            elif type(value) == str:
+                sql += f"'{value}', "
+            else:
+                sql += 'Null, '
+
+        sql = sql[:-2] + ');'
+        print(sql)
+
+        self.cursor.execute(sql)
         print('user created')
 
     def get_users(self):

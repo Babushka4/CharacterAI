@@ -3,6 +3,7 @@ from db_connection.db_tools import *
 
 
 async def get_started(mess):
+    print(mess)
     return await mess.answer("started")
 
 
