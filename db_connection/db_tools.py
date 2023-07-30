@@ -20,12 +20,11 @@ class SQLRequests:
     def user_exists(self, user_id):
 
         self.cursor.execute(f'SELECT * FROM "user" WHERE id = {user_id}')
-        print('user extracted')
 
         return self.cursor.fetchone()
 
     def create_user(self, data: dict):
-        print(data)
+
         sql = 'INSERT INTO "user" ('
         column_list = ', '.join(data.keys())
         sql += column_list + ') VALUES('
@@ -41,14 +40,25 @@ class SQLRequests:
                 sql += 'Null, '
 
         sql = sql[:-2] + ');'
-        print(sql)
 
         self.cursor.execute(sql)
-        print('user created')
 
-    def get_users(self):
+    def get_user_character(self, user_id: int):
 
-        self.cursor.execute('SELECT * FROM "user"')
-        print('all users getted success')
+        sql = f'''SELECT character.name
+        FROM character
+        JOIN user ON user.character_id = character.id
+        WHERE user.id = {user_id};'''
+        print(sql)
+        result = self.cursor.execute(sql)
 
-        return self.cursor.fetchall()
+        return result if result else None
+
+    def set_user_character(self, user_id, character_id):
+
+        sql = f'''
+        UPDATE user
+        SET character_id = {character_id}
+        WHERE id = {user_id};'''
+
+        self.cursor.execute(sql)
